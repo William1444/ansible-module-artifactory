@@ -1,0 +1,12 @@
+- hosts: localhost
+  tasks:
+
+    - name: Delete a github Repo
+      github_repo:
+        github_auth_key: "..."
+        name: "Hello-World"
+        state: absent
+        github_account: William1444
+      register: result
+
+    - debug: var=result
