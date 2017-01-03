@@ -9,11 +9,68 @@ Ansible modules to interact with an artifactory instance.
 ## Repository
 Ensure a repository is present
 ```yaml
-- repo:
-    name: docker-local
-    description: Docker repo
-    type: docker
+- name: Create an artifactory repo
+      artifactory_repo:
+        artifactory: "https://artifactory.is-in-the.cloud/artifactory/"
+        user: "admin_user"
+        password: "admin_user_password"
+        key: "docker-local"
+        packageType: "docker"
+        description: "A docker repo"
+      register: result
 ```
+
+Ensure a repository is absent
+```yaml
+- name: Delete an artifactory repo
+      artifactory_repo:
+        artifactory: "https://artifactory.is-in-the.cloud/artifactory/"
+        user: "admin_user"
+        password: "admin_user_password"
+        key: "docker-local"
+        packageType: "docker"
+        description: "A docker repo"
+        state: "absent"
+      register: result
+```
+
+# Development
+
+## Debugging
+
+For debugging the module, use the ansible `test-module` python script. First install it:
+  
+    git clone git://github.com/ansible/ansible.git --recursive
+    
+Then setup the environment to use it:
+
+    . ./ansible/hacking/env-setup
+    
+Then execute the module with params, for example:
+
+    ./ansible/hacking/test-module -m ./library/artifactory_repo.py -a "artifactory='https://artifactory.is-in-the.cloud/artifactory/' packageType=docker key='docker-local1' password='<admin_user_password>' user='<admin_user>'"
+    
+Without this you will not see print statements, or the underlying issue causing module failures.
+
+## Testing
+
+Ensure the test playbooks included here work with the module, by running
+
+    ansible-playbook play-delete.yml
+
+and
+    
+    ansible-playbook play-create.yml
+
+Run each multiple times to ensure the module handles scenarios where the repo is already in the desired state.
+
+# TODO
+
+Create gitlab pipeline
+
+Auto deploy to ansible control nodes
+
+Automate the test runs so that they can work in the gitlab pipeline
 
 # License
 
