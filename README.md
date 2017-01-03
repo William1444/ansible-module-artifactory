@@ -4,6 +4,19 @@ Ansible jfrog module
 # Introduction
 Ansible modules to interact with an artifactory instance.
 
+# Installation
+
+To use this custom module, it must be on the ansible library path. Add the following to your `/etc/ansible/ansible.cfg`:
+
+    library = /usr/share/my_modules/:/opt/ansible-modules
+
+Then, to clone the repo:
+
+    sudo mkdir -p /opt/ansible-roles
+    sudo chown -R <user>:<group> /opt/ansible-modules
+    cd /opt/ansible-roles
+    git clone https://github.com/William1444/ansible-module-artifactory
+
 # Usage
 
 ## Repository
