@@ -3,7 +3,7 @@
 
     - name: Delete an artifactory repo
       artifactory_repo:
-        artifactory: "https://artifactory.is-in-the.cloud/artifactory/"
+        artifactory: "{{ lookup('env','ARTI_HOST') }}"
         user: "{{ lookup('env','ARTI_USER') }}"
         password: "{{ lookup('env','ARTI_PASS') }}"
         key: "docker-local1"

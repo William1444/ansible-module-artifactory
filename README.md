@@ -11,7 +11,7 @@ Ensure a repository is present
 ```yaml
 - name: Create an artifactory repo
       artifactory_repo:
-        artifactory: "https://artifactory.is-in-the.cloud/artifactory/"
+        artifactory: "https://artifactory.com/artifactory/"
         user: "admin_user"
         password: "admin_user_password"
         key: "docker-local"
@@ -24,7 +24,7 @@ Ensure a repository is absent
 ```yaml
 - name: Delete an artifactory repo
       artifactory_repo:
-        artifactory: "https://artifactory.is-in-the.cloud/artifactory/"
+        artifactory: "https://artifactory.com/artifactory/"
         user: "admin_user"
         password: "admin_user_password"
         key: "docker-local"
@@ -48,17 +48,23 @@ Then setup the environment to use it:
     
 Then execute the module with params, for example:
 
-    ./ansible/hacking/test-module -m ./library/artifactory_repo.py -a "artifactory='https://artifactory.is-in-the.cloud/artifactory/' packageType=docker key='docker-local1' password='<admin_user_password>' user='<admin_user>'"
+    ./ansible/hacking/test-module -m ./library/artifactory_repo.py -a "artifactory='https://artifactory.com/artifactory/' packageType=docker key='docker-local1' password='<admin_user_password>' user='<admin_user>'"
     
 Without this you will not see print statements, or the underlying issue causing module failures.
 
 ## Testing
 
-Ensure the test playbooks included here work with the module, by running
+Ensure the test playbooks included here work with the module. Setup the python venv:
+
+    virtualenv venv
+    . ./venv/bin/activate
+    pip install -r requirements.txt
+
+Test the ensure absent playbook by running
 
     ansible-playbook play-delete.yml
 
-and
+Test the ensure present playbook by running
     
     ansible-playbook play-create.yml
 
