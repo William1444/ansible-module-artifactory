@@ -6,7 +6,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 
-def github_repo_present(data):
+def artifactory_repo_present(data):
 
     del data['state']
 
@@ -14,10 +14,12 @@ def github_repo_present(data):
         "Content-Type": "application/json"
     }
 
+    user = data['user']
+    password = data['password']
     del data['user']
     del data['password']
     url = "{}/{}/{}".format(data['artifactory'], 'api/repositories', data['key'])
-    result = requests.put(url, json.dumps(data), headers=headers, auth=HTTPBasicAuth('admin', 'password'))
+    result = requests.put(url, json.dumps(data), headers=headers, auth=HTTPBasicAuth(user, password))
 
     if result.status_code == 200:
         return False, True, {"status": result.status_code}
@@ -30,9 +32,11 @@ def github_repo_present(data):
     return True, False, meta
 
 
-def github_repo_absent(data=None):
+def artifactory_repo_absent(data=None):
+    user = data['user']
+    password = data['password']
     url = "{}/{}/{}".format(data['artifactory'], 'api/repositories', data['key'])
-    result = requests.delete(url, auth=HTTPBasicAuth('admin', 'password'))
+    result = requests.delete(url, auth=HTTPBasicAuth(user, password))
 
     if result.status_code == 200:
         return False, True, {"status": result.status_code}
@@ -70,8 +74,8 @@ def main():
         },
     }
     choice_map = {
-        "present": github_repo_present,
-        "absent": github_repo_absent,
+        "present": artifactory_repo_present,
+        "absent": artifactory_repo_absent,
     }
     module = AnsibleModule(argument_spec=fields)
     is_error, has_changed, result = choice_map.get(module.params['state'])(module.params)

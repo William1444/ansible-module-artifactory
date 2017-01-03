@@ -1,0 +1,12 @@
+- hosts: localhost
+  tasks:
+
+    - name: Register artifactory license
+      artifactory_license:
+        artifactory: "{{ lookup('env','ARTI_HOST') }}"
+        user: "{{ lookup('env','ARTI_USER') }}"
+        password: "{{ lookup('env','ARTI_PASS') }}"
+        licenseKey: "cHJvZHVjdHM6CiAgYXJ0aWZhY3Rvcnk6CiAgICBwcm9kdWN0OiBaWGh3YVhKbGN6b2dNakF4Tnkwd01pMHdNbFF3T1RveE9Ub3dNUzQ1TnpoYUNtbGtPaUJpWVdFeU5EWmlaaTB3TmpRekxUUXdNV1F0WWpBeE15MDVNR1UzWVRsak5XTTBObUVLYjNkdVpYSTZJRWxDVFFwd2NtOXdaWEowYVdWek9pQjdmUXB6YVdkdVlYUjFjbVU2SUc1MWJHd0tkSEpwWVd3NklIUnlkV1VLZEhsd1pUb2dWRkpKUVV3S2RtRnNhV1JHY205dE9pQXlNREUzTFRBeExUQXpWREE1T2pFNU9qQXhMamszT0ZvSwogICAgc2lnbmF0dXJlOiBXdWFHZlNkVHFCZHZ3YjRBa0hRbStwVWhQOGcyYXpoMGEvRDhOL2crZHFSdEFJM2pSaE95bGMreXo1d21Hc3dkVFUyYkM0My83ZTJNQ0xUN0dwajdYSGk2NXo0czV1blVjYXJkek9YaGkzL0Z1NzNSOURGQ1k1dmxzTTMyYXc4RFRJbExWSmVVUmhyWis4R3lUbGxRRTRLWG1rUDN6WFZUQ1JBNlNoRmVuLzc3QUErRHIyeU1IQjF5R2p0UkVBanRWclVxTmk3THJqQ3VPSU9MOGpLT0hNZ0xHWUNVczFvMnZHYk96ekRUZFhsenNiRklickNIR0YwOGlxSk90ZUljUExKWWVRd3FJRDNSR1oxT1pDelZUL0FkdytGNS85RnFNNVNhWjUwMllwajZGNU5SUW5PNjIrZG5iaUJEUkpuRGRzWDZ4VDFsZmF4Z2xGZWNDekpGd3c9PQp2ZXJzaW9uOiAxCg=="
+      register: result
+
+    - debug: var=result

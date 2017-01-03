@@ -62,11 +62,13 @@ Ensure the test playbooks included here work with the module. Setup the python v
 
 Test the ensure absent playbook by running
 
-    ansible-playbook play-delete.yml
+    ansible-playbook playbooks/play-artifactory-repo-delete.yml
 
 Test the ensure present playbook by running
     
-    ansible-playbook play-create.yml
+    ansible-playbook playbooks/play-artifactory-repo-create.yml
+    
+And so on for all playbooks
 
 Run each multiple times to ensure the module handles scenarios where the repo is already in the desired state.
 
