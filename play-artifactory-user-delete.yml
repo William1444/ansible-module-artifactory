@@ -1,6 +1,6 @@
 - hosts: localhost
   tasks:
-    - name: "Create/update an artifactory user"
+    - name: "Delete an artifactory user"
       artifactory_user:
         artifactory: "https://artifactory.is-in-the.cloud/artifactory"
         admin_user: "admin"
