@@ -1,0 +1,15 @@
+- hosts: localhost
+  tasks:
+    - name: "Create/update an artifactory user"
+      artifactory_user:
+        artifactory: "https://artifactory.is-in-the.cloud/artifactory"
+        admin_user: "admin"
+        admin_user_password: "password"
+        name: "will"
+        password: "williscool"
+        admin: "false"
+        email: 'w@w'
+        groups: ["useless"]
+      register: result
+
+    - debug: msg=result

@@ -63,6 +63,10 @@ Then execute the module with params, for example:
 
     ./ansible/hacking/test-module -m ./library/artifactory_repo.py -a "artifactory='https://artifactory.com/artifactory/' packageType=docker key='docker-local1' password='<admin_user_password>' user='<admin_user>'"
     
+To test the user module:
+
+    ./ansible/hacking/test-module -m ./library/artifactory_user.py -a "artifactory='https://artifactory.is-in-the.cloud/artifactory/' admin_user='<admin_user>' admin_user_password='<admin_password>' name='<user_to_delete>' state='absent'"
+    
 Without this you will not see print statements, or the underlying issue causing module failures.
 
 ## Testing
