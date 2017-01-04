@@ -2,9 +2,9 @@
   tasks:
     - name: "Create/update an artifactory user"
       artifactory_user:
-        artifactory: "https://artifactory.is-in-the.cloud/artifactory"
-        admin_user: "admin"
-        admin_user_password: "password"
+        artifactory: "{{ lookup('env','ARTI_HOST') }}"
+        user: "{{ lookup('env','ARTI_USER') }}"
+        password: "{{ lookup('env','ARTI_PASS') }}"
         name: "will"
         password: "williscool"
         admin: "false"
