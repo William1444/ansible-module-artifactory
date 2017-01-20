@@ -1,0 +1,20 @@
+- hosts: localhost
+  tasks:
+
+    - name: Register artifactory license
+      artifactory_license:
+        artifactory: "{{ lookup('env','ARTI_HOST') }}"
+        user: "{{ lookup('env','ARTI_USER') }}"
+        password: "{{ lookup('env','ARTI_PASS') }}"
+        key: test
+        ldapUrl: "ldap://rhim.is-in-the.cloud"
+        userDnPattern: "uid={0},cn=users,cn=accounts,dc=rhim,dc=is-in-the,dc=cloud"
+        searchFilter: "memberOf=cn=gitlab-users,cn=groups,cn=accounts,dc=rhim,dc=is-in-the,dc=cloud"
+        managerDn: "uid=gitlab-bind,cn=users,cn=accounts,dc=is-in-the,dc=cloud"
+        managerPassword: "catsarecoolerthancool"
+      register: result
+
+    - debug: var=result
+
+
+artifacto ry="https://artifactory.is-in-the.cloud/artifactory" user="admin" password="catsarecoolerthancool" key=test ldapUrl="ldap://rhim.is-in-the.cloud" userDnPattern="uid={0},cn=users,cn=accounts,dc=rhim,dc=is-in-the,dc=cloud" searchFilter="memberOf=cn=gitlab-users,cn=groups,cn=accounts,dc=rhim,dc=is-in-the,dc=cloud" managerDn="uid=gitlab-bind,cn=users,cn=accounts,dc=is-in-the,dc=cloud" managerPassword="catsarecoolerthancool"
