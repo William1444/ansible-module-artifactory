@@ -6,6 +6,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 from xml.etree import ElementTree
 import re
+sys.path.insert(0, '../utils')
 
 SECURITY_ENDPOINT = 'api/system/configuration'
 
@@ -60,6 +61,7 @@ def artifactory_config_security_absent(data):
     ns, current_config_tree = get_current_config(data)
     security_settings = current_config_tree.find('{}security'.format(ns))
     ldap_settings = security_settings.find('{}ldapSettings'.format(ns))
+
     for ldap_setting in ldap_settings.findall('{}ldapSetting'.format(ns)):
         key = ldap_setting.find('{}key'.format(ns))
         if key.text == data['key']:
@@ -125,34 +127,40 @@ def artifactory_config_security_present(data):
 
 
 def main():
-    fields = {
+    base_fields = {
         "artifactory": {"required": True, "type": "str"},
         "user": {"required": True, "type": "str"},
         "password": {"required": True, "type": "str"},
-        "key": {"required": True, "type": "str"},
-        "enabled": {"default": True, "type": "bool"},
-        "ldapUrl": {"required": True, "type": "str"},
-        "userDnPattern": {"required": True, "type": "str"},
-        "searchFilter": {"required": True, "type": "str"},
-        "searchBase": {"default": "", "type": "str"},
-        "searchSubTree": {"default": True, "type": "bool"},
-        "managerDn": {"required": True, "type": "str"},
-        "managerPassword": {"required": True, "type": "str"},
-        "autoCreateUser": {"default": True, "type": "bool"},
-        "emailAttribute": {"default": "mail", "type": "str"},
-        "ldapPoisoningProtection": {"default": True, "type": "bool"},
-        "state": {"default": "present", "choices": ["present", "absent"]}
+        "key": {"required": True, "type": "str"}
     }
+
     choice_map = {
         "present": artifactory_config_security_present,
         "absent": artifactory_config_security_absent
     }
-    module = AnsibleModule(argument_spec=fields)
+    # create a base module to enable access to the parsed params for craeting a dynamic arg spec
+    base_module = AnsibleModule(argument_spec=base_fields, check_invalid_arguments=False)
+    is_present = base_module.params['state'] == 'present'
+    base_fields.update({"enabled": {"default": True, "type": "bool"},
+                        "ldapUrl": {"required": is_present, "type": "str"},
+                        "userDnPattern": {"required": is_present, "type": "str"},
+                        "searchFilter": {"required": is_present, "type": "str"},
+                        "searchBase": {"default": "", "type": "str"},
+                        "searchSubTree": {"default": is_present, "type": "bool"},
+                        "managerDn": {"required": is_present, "type": "str"},
+                        "managerPassword": {"required": is_present, "type": "str"},
+                        "autoCreateUser": {"default": is_present, "type": "bool"},
+                        "emailAttribute": {"default": "mail", "type": "str"},
+                        "ldapPoisoningProtection": {"default": is_present, "type": "bool"},
+                        "state": {"default": "present", "choices": ["present", "absent"]}})
+    # re-init module with the dynamic arg spec
+    module = AnsibleModule(argument_spec=base_fields)
     is_error, has_changed, result = choice_map.get(module.params['state'])(module.params)
+
     if not is_error:
-        module.exit_json(changed=has_changed, meta=result)
+        base_module.exit_json(changed=has_changed, meta=result)
     else:
-        module.fail_json(msg="Error updating security", meta=result)
+        base_module.fail_json(msg="Error updating security", meta=result)
 
 
 if __name__ == '__main__':
